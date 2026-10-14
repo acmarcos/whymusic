@@ -1,0 +1,723 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+
+body {
+    background: #000;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.tela {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: #0a0a0a;
+    overflow: hidden;
+    z-index: 0;
+    transition: background-color 0.8s ease;
+    filter: saturate(1.6) brightness(1.15);
+}
+
+#capa-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(80px) saturate(3.5) brightness(0.85);
+    transform: scale(1.3);
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    mix-blend-mode: overlay;
+}
+
+#capa-img.visivel {
+    opacity: 1;
+}
+
+.painel {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    display: none;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+.painel.visivel {
+    display: flex;
+}
+
+.central-controle {
+    position: relative;
+    width: 340px;
+    padding: 1rem 1rem 1.2rem;
+    border-radius: 40px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    align-self: center;
+    isolation: isolate;
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.central-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: -1;
+    opacity: 0.6;
+    mix-blend-mode: overlay;
+}
+
+.capa-central {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 30px;
+    background: #1a1a1a;
+    align-self: center;
+}
+
+#capa-principal-video,
+#capa-principal-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+#capa-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    z-index: 2;
+}
+
+.info-musica {
+    text-align: left;
+    width: 100%;
+    padding-left: 20px;
+    margin-top: 0.2rem;
+}
+
+.info-musica h1 {
+    font-size: 1.4rem;
+    line-height: 25px;
+    font-weight: 700;
+    margin-bottom: 0.2rem;
+    letter-spacing: -0.03em;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 70%, transparent 100%);
+    color: #fff;
+}
+
+.info-musica #artista {
+    font-size: 0.9rem;
+    line-height: 17px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, #000 70%, transparent 100%);
+    mask-image: linear-gradient(to right, #000 70%, transparent 100%);
+    color: #fff;
+    opacity: 0.85;
+}
+
+.barra-progresso {
+    width: 100%;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    margin-top: 0.2rem;
+}
+
+.progresso-preenchido {
+    height: 100%;
+    width: 0%;
+    background: #fff;
+    border-radius: 2px;
+    transition: width 0.1s linear;
+}
+
+.controles-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    margin-top: 0.2rem;
+}
+
+.controle-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    padding: 0.4rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.2s, transform 0.1s;
+    opacity: 0.9;
+}
+
+.controle-btn:hover {
+    opacity: 1;
+}
+
+.controle-btn:active {
+    transform: scale(0.92);
+}
+
+.play-pause {
+    font-size: 1.7rem;
+    color: #fff;
+}
+
+.barra-volume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    width: 60%;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.8rem;
+    margin-top: 0.2rem;
+}
+
+.barra-volume input[type="range"] {
+    flex: 1;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 2px;
+    outline: none;
+    cursor: pointer;
+}
+
+.barra-volume input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+    border: none;
+}
+
+.barra-volume input[type="range"]::-moz-range-thumb {
+    width: 0;
+    height: 0;
+    background: transparent;
+    border: none;
+}
+
+.acoes-player {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3rem;
+    width: 100%;
+    margin-top: 0.2rem;
+}
+
+.acao-btn {
+    background: transparent;
+    border: none;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s, transform 0.1s;
+}
+
+.acao-btn:hover {
+    color: #fff;
+}
+
+.acao-btn:active {
+    transform: scale(0.92);
+}
+
+.adesivos {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 15;
+    pointer-events: none;
+}
+
+.adesivo {
+    position: absolute;
+    pointer-events: none;
+    user-select: none;
+    width: 80px;
+    height: auto;
+    transform-origin: center center;
+}
+
+body.editando .adesivo {
+    pointer-events: auto;
+    cursor: move;
+}
+
+body.editando .adesivo:hover {
+    outline: 2px dashed rgba(255, 255, 255, 0.7);
+    outline-offset: 8px;
+    border-radius: 4px;
+}
+
+.assistive {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 50;
+    user-select: none;
+    touch-action: none;
+}
+
+.assistive-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    cursor: pointer;
+    transition: background 0.2s, transform 0.3s;
+}
+
+.assistive-btn:hover {
+    background: rgba(255, 255, 255, 0.22);
+}
+
+.assistive.aberto .assistive-btn {
+    transform: rotate(45deg);
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.assistive-menu {
+    position: absolute;
+    bottom: 60px;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0;
+    transform: translateY(20px) scale(0.9);
+    pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.assistive.aberto .assistive-menu {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    pointer-events: auto;
+}
+
+.assistive-opcao {
+    width: 48px;
+    height: 48px;
+    border-radius: 40px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(24px) saturate(1.5);
+    -webkit-backdrop-filter: blur(24px) saturate(1.5);
+    color: #fff;
+    font-size: 1.05rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.assistive-opcao:hover {
+    background: rgba(255, 255, 255, 0.25);
+}
+
+.assistive-opcao:active {
+    transform: scale(0.96);
+}
+
+.modal-pesquisa {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    z-index: 60;
+    display: none;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 1rem 1rem;
+    overflow-y: auto;
+}
+
+.modal-pesquisa.ativo {
+    display: flex;
+}
+
+.modal-container {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.modal-topo {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.modal-voltar {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    border: none;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.modal-voltar:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.modal-conteudo {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 14px;
+    padding: 0.4rem 0.4rem 0.4rem 1rem;
+}
+
+.modal-conteudo input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    padding: 0.6rem 0;
+}
+
+.modal-conteudo input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.modal-conteudo button {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+    background: #fff;
+    color: #000;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+    flex-shrink: 0;
+}
+
+.modal-conteudo button:hover {
+    background: #e0e0e0;
+}
+
+.resultados-busca {
+    display: none;
+    flex-direction: column;
+    gap: 0.3rem;
+    background: rgba(30, 30, 30, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 0.5rem;
+    max-height: 60vh;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+.resultados-busca.ativo {
+    display: flex;
+}
+
+.resultados-busca::-webkit-scrollbar {
+    display: none;
+}
+
+.resultado-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.resultado-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.resultado-thumb {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #333;
+    flex-shrink: 0;
+}
+
+.resultado-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.resultado-titulo {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #fff;
+}
+
+.resultado-artista {
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.painel-galeria {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    padding: 1rem;
+    z-index: 45;
+    display: none;
+    justify-content: center;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.85), transparent);
+}
+
+.painel-galeria.ativo {
+    display: flex;
+}
+
+.galeria-topo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem;
+    scrollbar-width: none;
+}
+
+.galeria-topo::-webkit-scrollbar {
+    display: none;
+}
+
+.galeria-upload {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.4);
+    background: rgba(255, 255, 255, 0.06);
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.galeria-upload:hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.7);
+}
+
+.galeria-lista {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.galeria-lista::-webkit-scrollbar {
+    display: none;
+}
+
+.galeria-wrapper {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.galeria-item {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 12px;
+    padding: 0.3rem;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.galeria-item:hover {
+    background: rgba(255, 255, 255, 0.18);
+    transform: scale(1.05);
+}
+
+.galeria-excluir {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 60, 60, 0.9);
+    color: #fff;
+    font-size: 0.7rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.galeria-excluir:hover {
+    background: rgba(255, 30, 30, 1);
+    transform: scale(1.1);
+}
+
+.btn-fullscreen {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 30;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    color: #fff;
+    cursor: pointer;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, opacity 0.3s;
+    opacity: 0.5;
+}
+
+.btn-fullscreen:hover {
+    background: rgba(0, 0, 0, 0.8);
+    opacity: 1;
+}
+
+@media (max-width: 420px) {
+    .central-controle {
+        width: 280px;
+        border-radius: 34px;
+        padding: 0.9rem 0.9rem 1rem;
+        gap: 0.8rem;
+    }
+
+    .info-musica h1 {
+        font-size: 1.2rem;
+        line-height: 22px;
+    }
+
+    .info-musica #artista {
+        font-size: 0.85rem;
+        line-height: 15px;
+    }
+
+    .controles-player {
+        gap: 1.5rem;
+    }
+
+    .acoes-player {
+        gap: 2rem;
+    }
+
+    .barra-volume {
+        width: 65%;
+    }
+}
